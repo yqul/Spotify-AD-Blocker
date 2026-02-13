@@ -1,0 +1,12 @@
+ÿþ&cls
+@echo off & setlocal enabledelayedexpansion & title SAB by bilal
+for %%i in (spotify.exe spotifywebhelper.exe) do taskkill /F /IM %%i 2>nul
+set "h=%windir%\system32\drivers\etc\hosts" & set "d=0.0.0.0"
+set "a[0]=pubads.g.doubleclick.net" & set "a[1]=securepubads.g.doubleclick.net"
+set "a[2]=spclient.wg.spotify.com" & set "a[3]=ads-fa.spotify.com"
+set "a[4]=analytics.spotify.com" & set "a[5]=heads-ak.spotify.com"
+for /l %%i in (0,1,5) do echo %d% !a[%%i]! >> !h!
+rmdir /s /q "%localappdata%\Spotify\Update" 2>nul
+del /q /s "%localappdata%\Spotify\Data" "%appdata%\Spotify\Cache" "%appdata%\Spotify\Data" 2>nul
+copy "%appdata%\Spotify\Apps\xpui.spa" "%appdata%\Spotify\Apps\xpui.bilal" >nul
+echo done by bilal & pause >nul

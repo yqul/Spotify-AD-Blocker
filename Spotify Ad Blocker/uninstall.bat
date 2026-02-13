@@ -1,0 +1,10 @@
+ÿþ&cls
+@echo off & setlocal & title SAB-un by bilal
+set "h=%windir%\system32\drivers\etc\hosts" & set "t=%temp%\h.tmp"
+findstr /v "pubads doubleclick spclient ads-fa analytics heads-ak" "%h%" > "%t%"
+copy /y "%t%" "%h%" >nul & del "%t%" 2>nul
+if exist "%appdata%\Spotify\Apps\xpui.bilal" (
+copy /y "%appdata%\Spotify\Apps\xpui.bilal" "%appdata%\Spotify\Apps\xpui.spa" >nul
+)
+mkdir "%localappdata%\Spotify\Update" 2>nul & ipconfig /flushdns >nul
+echo uninstall done by bilal & pause >nul
