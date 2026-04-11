@@ -1,0 +1,358 @@
+ÿþ&cls
+@echo off
+
+:: -------------------------------------------------------
+:: Auto Admin Elevation
+:: -------------------------------------------------------
+net session >nul 2>&1
+if %errorlevel% neq 0 (
+    powershell -Command "Start-Process '%~f0' -Verb RunAs"
+    exit /b
+)
+
+start "" "https://guns.lol/bilalo"
+
+cls
+color 07
+mode con: cols=60 lines=25
+title Spotify Ad Blocker by Bilal
+
+set "h=%windir%\system32\drivers\etc\hosts"
+set "a=0.0.0.0 "
+
+cls
+echo.
+echo  +------------------------------------------------------+
+echo  ^|         S P O T I F Y   A D   B L O C K E R         ^|
+echo  ^|                    by Bilal                          ^|
+echo  ^|              guns.lol/bilalo                         ^|
+echo  +------------------------------------------------------+
+echo.
+echo  [1] Install   - Werbung blockieren
+echo  [2] Uninstall - Alles rueckgaengig machen
+echo.
+set /p "choice=  Deine Wahl: "
+if "%choice%"=="1" goto :INSTALL
+if "%choice%"=="2" goto :UNINSTALL
+echo  [!] Ungueltige Eingabe.
+timeout /t 2 >nul
+exit /b 1
+
+
+:: -------------------------------------------------------
+:INSTALL
+cls
+echo.
+echo  +------------------------------------------------------+
+echo  ^|                 I N S T A L L                        ^|
+echo  +------------------------------------------------------+
+echo.
+
+echo  [^>] Schliesse Spotify...
+taskkill /F /IM spotify.exe >nul 2>&1
+taskkill /F /IM spotifywebhelper.exe >nul 2>&1
+echo  [+] Spotify geschlossen
+echo.
+
+echo  [^>] Bereinige alte Eintraege...
+call :CLEAN
+echo  [+] Bereinigt
+echo.
+
+echo  [^>] Blockiere Werbe-Server...
+
+:: -------------------------------------------------------
+:: GOOGLE / DOUBLECLICK
+:: -------------------------------------------------------
+call :BLK pubads.g.doubleclick.net
+call :BLK securepubads.g.doubleclick.net
+call :BLK adclick.g.doubleclick.net
+call :BLK pagead2.googlesyndication.com
+call :BLK tpc.googlesyndication.com
+call :BLK www.googletagservices.com
+call :BLK googleads.g.doubleclick.net
+call :BLK googleadservices.com
+call :BLK stats.g.doubleclick.net
+call :BLK cm.g.doubleclick.net
+call :BLK ad.doubleclick.net
+
+:: -------------------------------------------------------
+:: SPOTIFY AD DOMAINS (Banner + Audio Ads)
+:: -------------------------------------------------------
+call :BLK ads-fa.spotify.com
+call :BLK ads.spotify.com
+call :BLK adeventtracker.spotify.com
+call :BLK pixel.spotify.com
+call :BLK heads-ak.spotify.com
+call :BLK heads-ec.spotify.com
+call :BLK audio2.spotify.com
+call :BLK www.audio2.spotify.com
+call :BLK audio-akp.spotify.com
+
+:: -------------------------------------------------------
+:: MOAT (Ad Viewability Tracking)
+:: -------------------------------------------------------
+call :BLK moatpixel.com
+call :BLK moatads.com
+call :BLK z.moatads.com
+call :BLK px.moatads.com
+
+:: -------------------------------------------------------
+:: APPNEXUS / XANDR
+:: -------------------------------------------------------
+call :BLK adnxs.com
+call :BLK ams1.ib.adnxs.com
+call :BLK ib.adnxs.com
+call :BLK secure.adnxs.com
+call :BLK nym1.ib.adnxs.com
+call :BLK fra1.ib.adnxs.com
+call :BLK sin1.ib.adnxs.com
+call :BLK mobile.adnxs.com
+
+:: -------------------------------------------------------
+:: PUBMATIC
+:: -------------------------------------------------------
+call :BLK gads.pubmatic.com
+call :BLK ads.pubmatic.com
+call :BLK simage2.pubmatic.com
+call :BLK image6.pubmatic.com
+call :BLK image2.pubmatic.com
+call :BLK openbid.pubmatic.com
+call :BLK hbopenbid.pubmatic.com
+
+:: -------------------------------------------------------
+:: RUBICON / MAGNITE
+:: -------------------------------------------------------
+call :BLK fastlane.rubiconproject.com
+call :BLK tap2-cdn.rubiconproject.com
+call :BLK eus.rubiconproject.com
+call :BLK prebid-server.rubiconproject.com
+call :BLK exapi.rubiconproject.com
+
+:: -------------------------------------------------------
+:: OPENX
+:: -------------------------------------------------------
+call :BLK u.openx.net
+call :BLK rtb.openx.net
+call :BLK delivery.openx.net
+call :BLK servedby.openx.net
+
+:: -------------------------------------------------------
+:: YAHOO / OATH / VERIZON ADS
+:: -------------------------------------------------------
+call :BLK ads.yahoo.com
+call :BLK adtech.de
+call :BLK adserver.adtech.de
+call :BLK us.adserver.adtech.de
+
+:: -------------------------------------------------------
+:: SPOTIFY AKAMAI AD CDN
+:: -------------------------------------------------------
+call :BLK heads-ak-spotify-com.akamaized.net
+
+:: -------------------------------------------------------
+:: FLASHTALKING / MEDIALINK
+:: -------------------------------------------------------
+call :BLK flashtalking.com
+call :BLK cdn.flashtalking.com
+call :BLK serv.adingo.jp
+
+:: -------------------------------------------------------
+:: DOUBLEVERIFY
+:: -------------------------------------------------------
+call :BLK doubleverify.com
+call :BLK cdn.doubleverify.com
+call :BLK rtb.doubleverify.com
+call :BLK pxl.doubleverify.com
+
+:: -------------------------------------------------------
+:: INTEGRAL AD SCIENCE (IAS)
+:: -------------------------------------------------------
+call :BLK pixel.adsafeprotected.com
+call :BLK fw.adsafeprotected.com
+call :BLK static.adsafeprotected.com
+
+:: -------------------------------------------------------
+:: OUTBRAIN
+:: -------------------------------------------------------
+call :BLK optimized.outbrain.com
+call :BLK amplify.outbrain.com
+call :BLK log.outbrain.com
+
+:: -------------------------------------------------------
+:: KRUX / SALESFORCE DMP
+:: -------------------------------------------------------
+call :BLK cdn.krxd.net
+call :BLK beacon.krxd.net
+call :BLK consumer.krxd.net
+
+:: -------------------------------------------------------
+:: JIVOX
+:: -------------------------------------------------------
+call :BLK mrad.jivox.com
+call :BLK ad.jivox.com
+
+:: -------------------------------------------------------
+:: CREATIVECDN / TTDINTL
+:: -------------------------------------------------------
+call :BLK creativecdn.com
+call :BLK cdn.creativecdn.com
+call :BLK match.prod.bidr.io
+
+:: -------------------------------------------------------
+:: WEITERE AD TRACKER
+:: -------------------------------------------------------
+call :BLK bounceexchange.com
+call :BLK scorecardresearch.com
+call :BLK chartbeat.net
+call :BLK media-match.com
+call :BLK omaze.com
+call :BLK cpx.to
+call :BLK display.advertising.com
+call :BLK idsync.rlcdn.com
+call :BLK rlcdn.com
+call :BLK sync.rlcdn.com
+call :BLK pixel.rubiconproject.com
+call :BLK us-u.openx.net
+
+:: -------------------------------------------------------
+:: LIVERAMP / ACXIOM
+:: -------------------------------------------------------
+call :BLK idsync.liveramp.com
+call :BLK cdn.liveramp.com
+
+:: -------------------------------------------------------
+:: TRITON DIGITAL (Audio Ad Delivery)
+:: -------------------------------------------------------
+call :BLK tritondigital.com
+call :BLK playerservices.streamtheworld.com
+call :BLK cpa.ds.sd.tritondigital.com
+call :BLK dai.tritondigital.com
+
+:: -------------------------------------------------------
+:: SPOTXCHANGE / MAGNITE (Video/Audio Ads)
+:: -------------------------------------------------------
+call :BLK search.spotxchange.com
+call :BLK search.spotx.tv
+call :BLK js.spotx.tv
+
+:: -------------------------------------------------------
+:: ADSWIZZ (Spotify's Audio Ad Partner)
+:: -------------------------------------------------------
+call :BLK ads.adswizz.com
+call :BLK listen.adswizz.com
+call :BLK perma.adswizz.com
+call :BLK imagesrv.adswizz.com
+call :BLK ads1-adswizz-com.akamaized.net
+call :BLK ads2-adswizz-com.akamaized.net
+call :BLK spotify-audio-a.akamaihd.net
+call :BLK audio.spotify.com.edgesuite.net
+
+echo  [+] Alle Werbe-Server blockiert
+echo.
+
+echo  [^>] Loesche Cache...
+for %%p in (
+    "%localappdata%\Spotify\Data"
+    "%localappdata%\Spotify\Cache"
+    "%appdata%\Spotify\Cache"
+    "%localappdata%\Spotify\Browser\Cache"
+    "%localappdata%\Spotify\Browser\Cookies"
+) do del /q /s "%%~p\*" >nul 2>&1
+del /q /s "%temp%\Spotify*" >nul 2>&1
+echo  [+] Cache geleert
+echo.
+
+echo  [^>] DNS flush...
+ipconfig /flushdns >nul
+echo  [+] DNS geflusht
+echo.
+
+echo  +------------------------------------------------------+
+echo  ^|   Fertig^^! Spotify kann jetzt gestartet werden.     ^|
+echo  +------------------------------------------------------+
+echo  ^|   Lyrics, Profil und Streaming funktionieren.       ^|
+echo  +------------------------------------------------------+
+echo  ^|                 Coded by Bilal                       ^|
+echo  ^|              guns.lol/bilalo                         ^|
+echo  +------------------------------------------------------+
+echo.
+echo  Druecke Enter zum Schliessen...
+pause >nul
+exit
+
+
+:: -------------------------------------------------------
+:UNINSTALL
+cls
+echo.
+echo  +------------------------------------------------------+
+echo  ^|                U N I N S T A L L                     ^|
+echo  +------------------------------------------------------+
+echo.
+
+echo  [^>] Entferne ALLE Ad-Blocker Eintraege...
+call :CLEAN
+echo  [+] Hosts-Datei bereinigt
+echo.
+
+echo  [^>] DNS flush...
+ipconfig /flushdns >nul
+echo  [+] DNS geflusht
+echo.
+
+echo  +------------------------------------------------------+
+echo  ^|             Uninstall abgeschlossen^^!               ^|
+echo  +------------------------------------------------------+
+echo  ^|                 Coded by Bilal                       ^|
+echo  ^|              guns.lol/bilalo                         ^|
+echo  +------------------------------------------------------+
+echo.
+echo  Druecke Enter zum Schliessen...
+pause >nul
+exit
+
+
+:: -------------------------------------------------------
+:: CLEAN: Entfernt ALLE bekannten Eintraege (eigene + fremde Blocker)
+:: Nutzt PowerShell fuer zuverlaessiges ASCII-Encoding
+:: -------------------------------------------------------
+:CLEAN
+powershell -Command ^
+  "$h='%h%';" ^
+  "$lines = Get-Content $h -Encoding UTF8 -ErrorAction SilentlyContinue;" ^
+  "if (-not $lines) { $lines = Get-Content $h -Encoding Default };" ^
+  "$clean = $lines | Where-Object {" ^
+  "  $_ -notmatch 'doubleclick|googlesyndication|googletagservices|googleadservices'" ^
+  "  -and $_ -notmatch 'ads-fa\.spotify|ads\.spotify\.com|adeventtracker\.spotify'" ^
+  "  -and $_ -notmatch 'pixel\.spotify|heads-ak\.spotify|heads-ec\.spotify'" ^
+  "  -and $_ -notmatch 'audio2\.spotify|audio-akp\.spotify|www\.audio2\.spotify'" ^
+  "  -and $_ -notmatch 'moatpixel|moatads|z\.moatads|px\.moatads'" ^
+  "  -and $_ -notmatch 'adnxs\.com|ib\.adnxs|mobile\.adnxs'" ^
+  "  -and $_ -notmatch 'pubmatic|rubiconproject|openx\.net'" ^
+  "  -and $_ -notmatch 'ads\.yahoo|adtech\.de|adserver\.adtech'" ^
+  "  -and $_ -notmatch 'heads-ak-spotify-com\.akamaized\.net'" ^
+  "  -and $_ -notmatch 'flashtalking|doubleverify|adsafeprotected'" ^
+  "  -and $_ -notmatch 'outbrain|krxd\.net|jivox|creativecdn'" ^
+  "  -and $_ -notmatch 'bounceexchange|scorecardresearch|chartbeat'" ^
+  "  -and $_ -notmatch 'media-match|omaze\.com|cpx\.to|rlcdn\.com'" ^
+  "  -and $_ -notmatch 'liveramp|tritondigital|streamtheworld'" ^
+  "  -and $_ -notmatch 'spotxchange|spotx\.tv|adswizz'" ^
+  "  -and $_ -notmatch 'spotify-audio.*akamaihd|audio\.spotify.*edgesuite'" ^
+  "  -and $_ -notmatch 'spclient\.wg\.spotify|bouncer\.spotify'" ^
+  "  -and $_ -notmatch 'analytics\.spotify|log\.spotify|smetrics\.spotify'" ^
+  "  -and $_ -notmatch 'audio-ak-spotify-com\.akamaized\.net'" ^
+  "  -and $_ -notmatch 'display\.advertising\.com|idsync\.rlcdn|match\.prod\.bidr'" ^
+  "};" ^
+  "$clean | Set-Content -Encoding ASCII $h"
+exit /b
+
+
+:: -------------------------------------------------------
+:BLK
+findstr /i /c:"%~1" "%h%" >nul 2>&1
+if errorlevel 1 (
+    echo    Blockiere: %~1
+    echo %a%%~1>> "%h%"
+)
+exit /b
